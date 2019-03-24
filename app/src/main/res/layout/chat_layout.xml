@@ -58,10 +58,10 @@
             android:layout_height="1dp"
             android:layout_marginBottom="8dp"
             android:background="@android:color/darker_gray"
-            app:layout_constraintBottom_toTopOf="@+id/commentInputEditText" />
+            app:layout_constraintBottom_toTopOf="@+id/messageInputEditText" />
 
         <EditText
-            android:id="@+id/commentInputEditText"
+            android:id="@+id/messageInputEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -87,9 +87,9 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="8dp"
             android:src="@drawable/ic_send_black_24dp"
-            app:layout_constraintBottom_toBottomOf="@id/commentInputEditText"
+            app:layout_constraintBottom_toBottomOf="@id/messageInputEditText"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/commentInputEditText" />
+            app:layout_constraintTop_toTopOf="@+id/messageInputEditText" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

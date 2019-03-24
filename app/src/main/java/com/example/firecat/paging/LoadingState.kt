@@ -8,5 +8,7 @@ enum class LoadingState {
     LOADING_MORE,
     MORE_LOADED,
     FINISHED,
-    ERROR
+    ERROR,
+    NEW_ITEM,
+    DELETED_ITEM
 }

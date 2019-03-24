@@ -1,7 +1,9 @@
 package com.example.firecat.chat
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -15,17 +17,16 @@ import kotlinx.android.synthetic.main.chat_layout.*
 import java.util.*
 
 class ChatFragment : Fragment() {
+    private val adapter = ChatAdapter(lifecycleOwner = this)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = ChatAdapter()
 
         messagesList.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.VERTICAL,
-            true
-        ).apply {
-            stackFromEnd = true
-        }
+            false
+        )
 
         messagesList.adapter = adapter
 
@@ -35,6 +36,22 @@ class ChatFragment : Fragment() {
                 handleLoadingState(it)
             }
         })
+
+        adapter.longClick = { message ->
+            AlertDialog.Builder(activity!!)
+                .setMessage("Delete?")
+                .setPositiveButton(
+                    "Yes!"
+                ) { dialog, id ->
+                    chatCollectionReference
+                        .document(message.id)
+                        .delete()
+                }
+                .setNegativeButton(
+                    "No!"
+                ) { dialog, id ->
+                }.create().show()
+        }
 
         setupSendMessage()
     }
@@ -57,6 +74,9 @@ class ChatFragment : Fragment() {
             LoadingState.MORE_LOADED -> renderView(messages = true)
             LoadingState.FINISHED -> renderView(messages = true)
             LoadingState.ERROR -> renderView(error = true)
+            LoadingState.NEW_ITEM -> renderView(messages = true, scroll = true)
+            LoadingState.DELETED_ITEM -> {
+            }
         }
     }
 
@@ -64,22 +84,26 @@ class ChatFragment : Fragment() {
         empty: Boolean = false,
         loading: Boolean = false,
         error: Boolean = false,
-        messages: Boolean = false
+        messages: Boolean = false,
+        scroll: Boolean = false
     ) {
         errorText.show(error)
         progressBar.show(loading)
         emptyStateText.show(empty)
         messagesList.show(messages)
+
+        if (scroll)
+            messagesList.smoothScrollToPosition(adapter.itemCount - 1)
     }
 
     private fun setupSendMessage() {
         sendButton.setOnClickListener {
-            val message = commentInputEditText.text.toString()
+            val message = messageInputEditText.text.toString()
             if (message.isEmpty())
                 return@setOnClickListener
 
             val id = UUID.randomUUID().toString()
-            chatQuery
+            chatCollectionReference
                 .document(id)
                 .set(
                     Message(
@@ -88,7 +112,7 @@ class ChatFragment : Fragment() {
                         timestamp = Timestamp.now()
                     )
                 )
-            commentInputEditText.setText("")
+            messageInputEditText.setText("")
         }
     }
 }

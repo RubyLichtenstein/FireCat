@@ -1,5 +1,6 @@
 package com.example.firecat.chat
 
+import android.arch.lifecycle.LifecycleOwner
 import android.support.v7.util.SortedList
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.util.SortedListAdapterCallback
@@ -7,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.firecat.paging.FirestoreRealTimePaginationAdapter
-import com.example.firecat.paging.PagingOptions
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.chat_message_layout.view.*
@@ -17,14 +17,17 @@ import java.util.*
 fun Query.whereAfterTimestamp(): Query =
     whereGreaterThan("timestamp", Timestamp.now())
 
-class ChatAdapter : FirestoreRealTimePaginationAdapter<Message, ChatAdapter.ViewHolder>(
-    paginationQuery = chatQuery,
-    realTimeQuery = chatQuery.whereAfterTimestamp(),
-    pagingOptions = PagingOptions(
-        prefetchDistance = 5,
-        pageSize = 10
-    ),
-    clazz = Message::class.java
+class ChatAdapter(
+    lifecycleOwner: LifecycleOwner?
+) : FirestoreRealTimePaginationAdapter<Message, ChatAdapter.ViewHolder>(
+    paginationQuery = messagesQuery,
+    realTimeQuery = newMessagesQuery,
+    prefetchDistance = 3,
+    pageSize = 10,
+    parser = { documentSnapshot ->
+        documentSnapshot.toObject(Message::class.java)
+    },
+    lifecycleOwner = lifecycleOwner
 ) {
 
     override val data: SortedList<Message> = SortedList<Message>(
@@ -51,10 +54,17 @@ class ChatAdapter : FirestoreRealTimePaginationAdapter<Message, ChatAdapter.View
         holder.bindData(data[position])
     }
 
-    class ViewHolder(private val containerView: View) : RecyclerView.ViewHolder(containerView) {
+    var longClick: ((Message) -> Unit)? = null
+
+    inner class ViewHolder(private val containerView: View) :
+        RecyclerView.ViewHolder(containerView) {
         fun bindData(message: Message) {
             containerView.messageContent.text = message.content
             containerView.messageTimestamp.text = formatTimestamp(message.timestamp.toDate())
+            containerView.messageListItem.setOnLongClickListener {
+                longClick?.invoke(message)
+                true
+            }
         }
 
         private fun formatTimestamp(date: Date): String {
