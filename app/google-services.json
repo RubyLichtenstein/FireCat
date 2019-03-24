@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1017747914543",
+    "firebase_url": "https://firecat-6c2b0.firebaseio.com",
+    "project_id": "firecat-6c2b0",
+    "storage_bucket": "firecat-6c2b0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1017747914543:android:72e553231546b749",
+        "android_client_info": {
+          "package_name": "com.example.firecat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1017747914543-0bivqopfd174r528emrcatdo5tvg6gb0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRWDSRGcCZfkhDcD86z0FHjIbBf05A9_4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
