@@ -1,7 +1,8 @@
-# FireCat
+# FireCat - Firestore real time + pagination recycler view adapter. 
 
 Firestore is great solution for no sql data base with real time updates,
-when you build chat app you need also pagination for efficient old messages loading and real time update for new messages. 
+
+When you build chat app you need also pagination for efficient old messages loading and real time update for new messages. 
 
 Unfortunately [FirebaseUI-Android](https://github.com/firebase/FirebaseUI-Android) provide only 
 [Real time](https://github.com/firebase/FirebaseUI-Android/blob/master/firestore/README.md#using-the-firestorerecycleradapter) 
