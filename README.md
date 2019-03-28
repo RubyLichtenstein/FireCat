@@ -8,14 +8,14 @@ Unfortunately [FirebaseUI-Android](https://github.com/firebase/FirebaseUI-Androi
 [Real time](https://github.com/firebase/FirebaseUI-Android/blob/master/firestore/README.md#using-the-firestorerecycleradapter) 
 recycler view adapter or [pagination](https://github.com/firebase/FirebaseUI-Android/blob/master/firestore/README.md#using-the-firestorepagingadapter) recycler view adapter, 
 
-For uses cases like chat app we need adapter that support real time and pagination but is no any offical implemantion yet :( 
+For uses cases like chat app we need adapter that support real time and pagination but is no any official implemantion yet :( 
 
 ### FireCat for the rescue! with 'FirestoreRealTimePaginationAdapter'
 
 Usage `FirestoreRealTimePaginationAdapter`
 
 ```kotlin
-abstract class FirestoreRealTimePaginationAdapter<T, VH : RecyclerView.ViewHolder>(
+class FirestoreRealTimePaginationAdapter(
     paginationQuery: Query,
     realTimeQuery: Query,
     lifecycleOwner: LifecycleOwner?,
@@ -25,8 +25,21 @@ abstract class FirestoreRealTimePaginationAdapter<T, VH : RecyclerView.ViewHolde
 )
 ```
 
+Chat implemantation with `FirestoreRealTimePaginationAdapter` 
 
-Chat app example https://github.com/RubyLichtenstein/FireCat/blob/master/app/src/main/java/com/example/firecat/chat/ChatAdapter.kt
+https://github.com/RubyLichtenstein/FireCat/blob/master/app/src/main/java/com/example/firecat/chat/ChatAdapter.kt
 
 ```kotlin
+class ChatAdapter(
+    lifecycleOwner: LifecycleOwner?
+) : FirestoreRealTimePaginationAdapter<Message, ChatAdapter.ViewHolder>(
+    paginationQuery = messagesQuery,
+    realTimeQuery = newMessagesQuery,
+    prefetchDistance = 3,
+    pageSize = 10,
+    parser = { documentSnapshot ->
+        documentSnapshot.toObject(Message::class.java)
+    },
+    lifecycleOwner = lifecycleOwner
+)
 ```
