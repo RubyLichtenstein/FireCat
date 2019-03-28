@@ -11,6 +11,7 @@ recycler view adapter or [pagination](https://github.com/firebase/FirebaseUI-And
 For uses cases like chat app we need adapter that support real time and pagination but is no any official implemantion yet :( 
 
 ### FireCat for the rescue! with 'FirestoreRealTimePaginationAdapter'
+https://github.com/RubyLichtenstein/FireCat/blob/master/app/src/main/java/com/example/firecat/paging/FirestoreRealTimePaginationAdapter.kt
 
 Usage `FirestoreRealTimePaginationAdapter`
 
